@@ -15,12 +15,13 @@
     
     if (self ) {
         NSArray *categories = dictionary[@"categories"];
+        
         NSMutableArray *categoryNames = [NSMutableArray array];
         [categories enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, bool *stop) {
             [categoryNames addObject:obj[0]];
         }];
-        
         self.categories = [categoryNames componentsJoinedByString:@", "];
+
         self.businessName = dictionary[@"name"];
         self.imageUrl = dictionary[@"image_url"];
 

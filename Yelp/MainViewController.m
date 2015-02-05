@@ -17,11 +17,12 @@ NSString * const kYelpConsumerSecret = @"9uZNRNXiN4-iEs8hynxXgdGfWJ4";
 NSString * const kYelpToken = @"ZKRkWnEBhfYN03BfJxIgGB7qn0ERm3bh";
 NSString * const kYelpTokenSecret = @"fUb1f-8ioqFAsL2DpPgNTzfBLZM";
 
-NSString *defaultTerm = @"Thai";
+NSString *defaultTerm = @"Restaurants";
 
 @interface MainViewController () <UITableViewDataSource, UITableViewDelegate, FiltersViewControllerDelegate, UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
 @property (nonatomic, strong) YelpClient *client;
 @property (nonatomic, strong) NSArray *businesses;
 @property (nonatomic, strong) BusinessCell *prototypeBusinessCell;
@@ -42,7 +43,12 @@ NSString *defaultTerm = @"Thai";
         // You can register for Yelp API keys here: http://www.yelp.com/developers/manage_api_keys
         self.client = [[YelpClient alloc] initWithConsumerKey:kYelpConsumerKey consumerSecret:kYelpConsumerSecret accessToken:kYelpToken accessSecret:kYelpTokenSecret];
         [self fetchBusinessWithQuery:defaultTerm params:nil];
+    
+        // navigation bar appearance
+        [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:200.0/255 green:11.0/255 blue:5.0/255 alpha:1.0]];
+        [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     }
+    
     return self;
 }
 
@@ -57,9 +63,8 @@ NSString *defaultTerm = @"Thai";
     [self.tableView registerNib:[UINib nibWithNibName:@"BusinessCell" bundle:nil] forCellReuseIdentifier:@"BusinessCell"];
 
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    //self.title = @"Yelp";
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Filter" style:UIBarButtonItemStyleBordered target:self action:@selector(onFilterButton)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Filter" style:UIBarButtonItemStylePlain target:self action:@selector(onFilterButton)];
     
     self.searchBar = [[UISearchBar alloc] init];
     [self.searchBar sizeToFit];
@@ -122,7 +127,6 @@ NSString *defaultTerm = @"Thai";
         
         NSArray *businessDict = response[@"businesses"];
         self.businesses = [Business businessesWithDictionaries:businessDict];
-        
         [self.tableView reloadData];
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
